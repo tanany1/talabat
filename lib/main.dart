@@ -66,7 +66,6 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.blueAccent,
           image: DecorationImage(
             image: AssetImage('assets/img/bg.jpg'), // Add background image here
             fit: BoxFit.cover,
@@ -145,6 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     await sendCommandToArduino(command);
   }
+
   List<Question> questions = [
     Question(
       'Pick the Item that is NOT in the School Supplies List?',
@@ -245,13 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _startQuestionTimer();
-  }
-
-  void _startQuestionTimer() {
-    _timer = Timer(const Duration(seconds: 30), () {
-      handleAnswer(-1); // Automatically handle incorrect answer after 30 seconds
-    });
   }
 
   void handleAnswer(int selectedIndex) {
@@ -309,7 +302,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.orangeAccent,
           image: DecorationImage(
             image: AssetImage('assets/img/Background.jpg'), // Background image
             fit: BoxFit.cover,
@@ -406,7 +398,6 @@ class CorrectAnswerScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.orangeAccent,
           image: DecorationImage(
             image: AssetImage('assets/img/Winner-screen.jpg'), // Background for correct answer screen
             fit: BoxFit.cover,
@@ -416,13 +407,7 @@ class CorrectAnswerScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            //   Image.asset('assets/img/right.png',),// Add a congrats gif to your assets folder
-            //   const SizedBox(height: 20),
-            //   const Text(
-            //     'Congratulations! You got it right!',
-            //     style: TextStyle(fontSize: 32, color: Colors.white),
-            //   ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 250),
               ElevatedButton(
                 onPressed: () {
                   // Restart the quiz with a random question from index 0 to 6
@@ -479,7 +464,6 @@ class IncorrectAnswerScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.orangeAccent,
           image: DecorationImage(
             image: AssetImage('assets/img/Background.jpg'), // Background for incorrect answer screen
             fit: BoxFit.cover,
@@ -552,7 +536,6 @@ class CorrectFirstAnswerScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.orangeAccent,
           image: DecorationImage(
             image: AssetImage('assets/img/Winner-screen.jpg'), // Background for correct answer screen
             fit: BoxFit.cover,
@@ -562,13 +545,7 @@ class CorrectFirstAnswerScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            //   const Icon(Icons.check_circle, color: Colors.green, size: 200),
-            //   const SizedBox(height: 20),
-            //   const Text(
-            //     'Right Answer',
-            //     style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold, color: Colors.white),
-            //   ),
-            //   const SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   // Navigate to a random question from index 7 or 8
@@ -599,11 +576,11 @@ class CorrectFirstAnswerScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold, // Bold text
                   ),
                 ),
-                SizedBox(width: 10),
-                Icon(
-                  Icons.arrow_forward_ios_rounded, // Arrow icon similar to the image
-                  color: Color(0xFF0066FF),
-                  size: 50,// Blue color for the arrow
+                  SizedBox(width: 10),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded, // Arrow icon similar to the image
+                    color: Color(0xFF0066FF),
+                    size: 50,// Blue color for the arrow
                 ),
                 ]
                 ),
