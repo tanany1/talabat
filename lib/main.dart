@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -31,18 +34,6 @@ Future<void> connectToArduino() async {
 
 Future<void> sendCommandToArduino(String command) async {
   _serialPort!.write(Uint8List.fromList(command.codeUnits));
-}
-
-void onQuestionAnswered(int currentIndex) async {
-  await Future.delayed(const Duration(milliseconds: 1000)); // Adjust delay as needed
-  String command = '';
-
-  if (currentIndex == 7) {
-    command = '1'; // Command to operate Motor 1
-  } else if (currentIndex == 8) {
-    command = '3'; // Command to operate Motor 2
-  }
-  await sendCommandToArduino(command);
 }
 
 class MyApp extends StatelessWidget {
@@ -90,7 +81,8 @@ class WelcomeScreen extends StatelessWidget {
                   backgroundColor: const Color(0xFFFF6200), // Orange background color
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20), // Padding for button size
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), side: const BorderSide(color: Colors.white , width: 5), // Rounded corners (similar to the image)
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: Colors.white , width: 5), // Rounded corners (similar to the image)
                   ),
                 ),
                 child: const Row(
@@ -114,7 +106,6 @@ class WelcomeScreen extends StatelessWidget {
                   ],
                 ),
               )
-
             ],
           ),
         ),
@@ -133,16 +124,68 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final int currentQuestionIndex;
+  int correctCount7 = 0;
+  int correctCount8 = 0;
+
   void onQuestionAnswered(int currentIndex) async {
     await Future.delayed(const Duration(milliseconds: 5)); // Adjust delay as needed
     String command = '';
 
     if (currentIndex == 7) {
       command = '1'; // Command to operate Motor 1
+      correctCount7++;
+      if (correctCount7 == 8) {
+        _showNotification('Slot A Nearly Empty,Please Refill');
+      }
     } else if (currentIndex == 8) {
       command = '3'; // Command to operate Motor 2
+      correctCount8++;
+      if (correctCount8 == 8) {
+        _showNotification('Slot C Nearly Empty,Please Refill');
+      }
     }
     await sendCommandToArduino(command);
+  }
+
+  void _showNotification(String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 100,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    // Remove the notification after a short delay
+    Future.delayed(const Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
   }
 
   List<Question> questions = [
@@ -240,7 +283,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int correctAnswers = 0;
   int currentIndex = 0;
-  Timer? _timer;
 
   @override
   void initState() {
@@ -291,7 +333,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -415,7 +456,7 @@ class CorrectAnswerScreen extends StatelessWidget {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomeScreen(currentQuestionIndex: firstQuestionIndex),
+                      builder: (context) => PhoneRegistrationScreen(),
                     ),
                         (route) => false, // Removes all previous routes
                   );
@@ -432,7 +473,7 @@ class CorrectAnswerScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Start Over',
+                      'Register Now',
                       style: TextStyle(
                         fontSize: 60,
                         color: Colors.white, // White text
@@ -441,7 +482,7 @@ class CorrectAnswerScreen extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     Icon(
-                      Icons.restart_alt, // Arrow icon similar to the image
+                      Icons.arrow_forward_ios_rounded, // Arrow icon similar to the image
                       color: Color(0xFF0066FF),
                       size: 50,// Blue color for the arrow
                     ), // Circular arrow icon
@@ -528,7 +569,240 @@ class IncorrectAnswerScreen extends StatelessWidget {
   }
 }
 
-class CorrectFirstAnswerScreen extends StatelessWidget {
+class PhoneRegistrationScreen extends StatefulWidget {
+   PhoneRegistrationScreen({super.key});
+  int currentQuestionIndex = 0;
+
+  @override
+  _PhoneRegistrationScreenState createState() => _PhoneRegistrationScreenState();
+}
+
+class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
+  final TextEditingController _phoneController = TextEditingController();
+  final String _excelFilePath = 'C:/Users/MS STORE/Desktop/talabat data sheet.xlsx';
+  int firstQuestionIndex =0;
+
+
+  void _submitPhoneNumber() {
+    String phoneNumber = _phoneController.text;
+    if (phoneNumber.isNotEmpty) {
+      _updateExcelFile(phoneNumber);
+    }
+  }
+  
+  void _updateExcelFile(String phoneNumber) {
+    var file = File(_excelFilePath);
+    var bytes = file.readAsBytesSync();
+    var excel = Excel.decodeBytes(bytes);
+
+    // Assuming you are writing to the first sheet
+    var sheet = excel['Sheet1'];
+    sheet.appendRow([phoneNumber]);
+
+    var fileBytes = excel.encode();
+    file.writeAsBytesSync(fileBytes!);
+  }
+
+  void _addDigit(String digit) {
+    setState(() {
+      if (_phoneController.text.length < 11) {
+        _phoneController.text += digit;
+      }
+    });
+  }
+
+  void _clearLastDigit() {
+    setState(() {
+      if (_phoneController.text.isNotEmpty) {
+        _phoneController.text =
+            _phoneController.text.substring(
+                0, _phoneController.text.length - 1);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/img/Background.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // Centered container
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              width: 310,
+              height: 540,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: _phoneController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter your phone number',
+                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.phone),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                    ),
+                    keyboardType: TextInputType.none,
+                    maxLength: 11,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _submitPhoneNumber,
+                        child: const Text('Submit'),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF6200), // Orange background color
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20), // Padding for button size
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30), side: const BorderSide(color: Colors.white , width: 5), // Rounded corners (similar to the image)
+                          ),
+                        ),
+                        child: const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Start Over',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white, // White text
+                                fontWeight: FontWeight.bold, // Bold text
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Icon(
+                              Icons.restart_alt, // Arrow icon similar to the image
+                              color: Color(0xFF0066FF),
+                              size: 20,// Blue color for the arrow
+                            ), // Circular arrow icon
+                          ],
+                        ),
+                        onPressed:  () {
+                          // Restart the quiz with a random question from index 0 to 6
+                          int firstQuestionIndex = (DateTime.now().millisecond % 7); // Random question from index 0-6
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(currentQuestionIndex: firstQuestionIndex),
+                            ),
+                                (route) => false, // Removes all previous routes
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  // Keypad for digits
+                  Expanded(
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 5, // Reduced spacing between rows
+                        crossAxisSpacing: 5, // Reduced spacing between columns
+                      ),
+                      itemCount: 12,
+                      itemBuilder: (context, index) {
+                        if (index == 9) {
+                          return SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.grey[100],
+                              ),
+                              onPressed: _clearLastDigit,
+                              child: const Icon(Icons.backspace, size: 18),
+                            ),
+                          );
+                        } else if (index == 10) {
+                          return SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.grey[100],
+                              ),
+                              onPressed: () => _addDigit('0'),
+                              child: const Text('0', style: TextStyle(fontSize: 14)),
+                            ),
+                          );
+                        } else if (index == 11) {
+                          return const SizedBox(); // Empty space
+                        } else {
+                          return SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.grey[100],
+                              ),
+                              onPressed: () => _addDigit((index + 1).toString()),
+                              child: Text(
+                                (index + 1).toString(),
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+  class CorrectFirstAnswerScreen extends StatelessWidget {
   const CorrectFirstAnswerScreen({super.key});
 
   @override
