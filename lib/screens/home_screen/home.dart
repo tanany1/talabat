@@ -23,13 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
     String command = '';
 
     if (currentIndex == 7) {
-      command = '1'; // Command to operate Motor 1
+      command = 'A'; // Command to operate Motor 1
       correctCount7++;
       if (correctCount7 == 8) {
         _showNotification('Slot A Nearly Empty,Please Refill');
       }
     } else if (currentIndex == 8) {
-      command = '3'; // Command to operate Motor 2
+      command = 'C'; // Command to operate Motor 2
       correctCount8++;
       if (correctCount8 == 8) {
         _showNotification('Slot C Nearly Empty,Please Refill');
@@ -151,10 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
       0,
     ),
     Question(
-      'Which of these is a refreshing & nutritious on-the-go drink for the school day?',
+      'Which of these is a refreshing & nutritious \non-the-go drink for the school day?',
       [
         Option('A) Tea', 'assets/img/tea.png'),
-        Option('B) Domty Juice', 'assets/img/download.jpeg'),
+        Option('B) Fresh Juice', 'assets/img/fresh_juice.png'),
         Option('C) Sugar Cane Juice', 'assets/img/sugercane.jpg'),
         Option('D) Soda Drink', 'assets/img/soda-Photoroom.png'),
       ],
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'Which of these is an on-the-go snack for the school day?',
       [
         Option('A) Fish', 'assets/img/fish.jpg'),
-        Option('B) Domty Sandwich', 'assets/img/domty.jpg'),
+        Option('B) Healthy Snack', 'assets/img/healthy_snack.png'),
         Option('C) Molokheya & Rice', 'assets/img/IMG_6515.jpg'),
         Option('D) Sugar Cane Juice', 'assets/img/sugercane.jpg'),
       ],
@@ -240,22 +240,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(60.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: MediaQuery.sizeOf(context).height*0.25,),
+              SizedBox(height: MediaQuery.sizeOf(context).height*0.25),
               Text(
                 question.text,
                 style: const TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  fontSize: 60,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xff4a1518),
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 100),
               Expanded(
                 child: GridView.builder(
                   itemCount: question.options.length,
@@ -263,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 4,
                     mainAxisSpacing: 20,
                     crossAxisSpacing: 20,
-                    childAspectRatio: 1.5,
+                    childAspectRatio: 1.3,
                   ),
                   itemBuilder: (context, index) {
                     return _buildOptionCard(
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(50),
           boxShadow: const [
             BoxShadow(
               color: Colors.black26,
@@ -301,17 +301,17 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Image.asset(
               imagePath,
-              height: 120,
-              width: 120,
+              height: 200,
+              width: 200,
               fit: BoxFit.contain,
             ),
             const SizedBox(height: 20),
             Text(
               text,
               style: const TextStyle(
-                fontSize: 28,
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Color(0xff4a1518),
               ),
               textAlign: TextAlign.center,
             ),

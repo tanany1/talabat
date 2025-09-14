@@ -19,10 +19,10 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/img/Talabat logo_White.png', fit: BoxFit.contain, height: 150,width: MediaQuery.of(context).size.width*0.75,), //talabat logo
+              Image.asset('assets/img/Talabat-Logo.png', fit: BoxFit.contain, height: 200,width: MediaQuery.of(context).size.width*0.75,), //talabat logo
               const SizedBox(height: 50),
-              ElevatedButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -30,33 +30,12 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF6200), // Orange background color
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20), // Padding for button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: const BorderSide(color: Colors.white , width: 5), // Rounded corners (similar to the image)
-                  ),
-                ),
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Register Now & Continue',
-                      style: TextStyle(
-                        fontSize: 60,
-                        color: Colors.white, // White text
-                        fontWeight: FontWeight.bold, // Bold text
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded, // Arrow icon similar to the image
-                      color: Color(0xFF0066FF),// Blue color for the arrow
-                      size: 50,
-                    ),
-                  ],
+                child: Image.asset(
+                  'assets/img/start.png', // Replace with your image path
+                  fit: BoxFit.contain, // Adjust how the image fits in the container
+                  // Optionally, set width and height if needed
+                  width: 900, // Adjust based on your design
+                  height: 150, // Adjust based on your design
                 ),
               )
             ],

@@ -16,7 +16,7 @@ Future<void> main() async {
 SerialPort? _serialPort;
 
 Future<void> connectToArduino() async {
-  String portName = 'COM7'; // Change this to your Arduino port
+  String portName = 'COM8'; // Change this to your Arduino port
   int baudRate = 9600;
 
   _serialPort = SerialPort(portName);

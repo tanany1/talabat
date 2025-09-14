@@ -34,6 +34,7 @@ dependencies:
   usb_serial: ^0.2.0
   window_manager: ^0.2.7
   excel: ^2.0.0
+  confetti: ^0.8.0
 #  googleapis: ^13.2.0
 #  googleapis_auth: ^1.6.0
 #  http: ^1.2.2

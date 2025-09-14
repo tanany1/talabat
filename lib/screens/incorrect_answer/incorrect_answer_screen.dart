@@ -10,7 +10,8 @@ class IncorrectAnswerScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/img/Background.jpg'), // Background for incorrect answer screen
+            image: AssetImage('assets/img/Background.jpg'),
+            // Background for incorrect answer screen
             fit: BoxFit.cover,
           ),
         ),
@@ -18,53 +19,41 @@ class IncorrectAnswerScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/img/wrong.png'),// Add an image for incorrect answer
+              Image.asset('assets/img/wrong.png', fit: BoxFit.contain,width: 250,height: 250,),
+              // Add an image for incorrect answer
               const SizedBox(height: 20),
               const Text(
                 'Wrong Answer! Try Again',
-                style: TextStyle(fontSize: 32, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 42,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xff4a1518),
+                ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   // Restart the quiz with a random question from index 0 to 6
-                  int firstQuestionIndex = (DateTime.now().millisecond % 7); // Random question from index 0-6
+                  int firstQuestionIndex = (DateTime.now().millisecond %
+                      7); // Random question from index 0-6
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomeScreen(currentQuestionIndex: firstQuestionIndex),
+                      builder: (context) =>
+                          HomeScreen(currentQuestionIndex: firstQuestionIndex),
                     ),
-                        (route) => false, // Removes all previous routes
+                    (route) => false, // Removes all previous routes
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF6200), // Orange background color
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20), // Padding for button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), side: const BorderSide(color: Colors.white , width: 5), // Rounded corners (similar to the image)
-                  ),
+                child: Image.asset(
+                  'assets/img/try_again.png', // Replace with your image path
+                  fit: BoxFit.contain,
+                  // Adjust how the image fits in the container
+                  width: 900,
+                  // Adjust based on your design
+                  height: 150, // Adjust based on your design
                 ),
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Try Again',
-                      style: TextStyle(
-                        fontSize: 60,
-                        color: Colors.white, // White text
-                        fontWeight: FontWeight.bold, // Bold text
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Icon(
-                      Icons.restart_alt, // Arrow icon similar to the image
-                      color: Color(0xFF0066FF),
-                      size: 50,// Blue color for the arrow
-                    ), // Circular arrow icon
-                  ],
-                ),
-              ),
+              )
             ],
           ),
         ),

@@ -16,7 +16,8 @@ class PhoneRegistrationScreen extends StatefulWidget {
 class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final String _excelFilePath = 'C:/Users/MS Store/Desktop/talabat data sheet.xlsx';
-  int firstQuestionIndex =0;
+  int firstQuestionIndex = 0;
+
   void _submitPhoneNumber() {
     String phoneNumber = _phoneController.text;
     if (phoneNumber.isNotEmpty) {
@@ -49,8 +50,7 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
     setState(() {
       if (_phoneController.text.isNotEmpty) {
         _phoneController.text =
-            _phoneController.text.substring(
-                0, _phoneController.text.length - 1);
+            _phoneController.text.substring(0, _phoneController.text.length - 1);
       }
     });
   }
@@ -89,24 +89,46 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter your phone number',
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.phone),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                    ),
-                    keyboardType: TextInputType.none,
-                    maxLength: 11,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _phoneController,
+                          decoration: InputDecoration(
+                            labelText: 'Enter your phone number',
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.phone),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                          ),
+                          keyboardType: TextInputType.none,
+                          maxLength: 11,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20,),
+                      SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            padding: EdgeInsets.zero,
+                            backgroundColor: const Color(0xffff5900),
+                          ),
+                          onPressed: _clearLastDigit,
+                          child: const Icon(Icons.backspace, size: 24 , color: Color(0xfff7ece0),),
+                        ),
+                      ),
                     ],
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
                   ),
                   const SizedBox(height: 10),
                   // Keypad for digits
@@ -114,36 +136,18 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                     child: GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        mainAxisSpacing: 10, // Reduced spacing between rows
-                        crossAxisSpacing: 10, // Reduced spacing between columns
-                        childAspectRatio: 150,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 1.0,
                         mainAxisExtent: 80,
                       ),
-                      itemCount: 12,
+                      itemCount: 10,
                       itemBuilder: (context, index) {
                         if (index == 9) {
                           return Center(
                             child: SizedBox(
-                              width: 150,
-                              height: 180,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  padding: EdgeInsets.zero,
-                                  backgroundColor: Colors.green[500],
-                                ),
-                                onPressed:_submitPhoneNumber,
-                                child: const Icon(Icons.check, size: 24),
-                              ),
-                            ),
-                          );
-                        } else if (index == 10) {
-                          return Center(
-                            child: SizedBox(
-                              width: 150,
-                              height: 180,
+                              width: 450, // Span the width of 3 buttons
+                              height: 80,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -153,33 +157,15 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                                   backgroundColor: Colors.grey[100],
                                 ),
                                 onPressed: () => _addDigit('0'),
-                                child: const Text('0', style: TextStyle(fontSize: 20)),
+                                child: const Text('0', style: TextStyle(fontSize: 40)),
                               ),
                             ),
                           );
-                        } else if (index == 11) {
-                          return Center(
-                            child: SizedBox(
-                              width: 150,
-                              height: 180,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  padding: EdgeInsets.zero,
-                                  backgroundColor: Colors.red[500],
-                                ),
-                                onPressed: _clearLastDigit,
-                                child: const Icon(Icons.backspace, size: 24),
-                              ),
-                            ),
-                          ); // Empty space
                         } else {
                           return Center(
                             child: SizedBox(
                               width: 150,
-                              height: 180,
+                              height: 80,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -191,7 +177,7 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                                 onPressed: () => _addDigit((index + 1).toString()),
                                 child: Text(
                                   (index + 1).toString(),
-                                  style: const TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 40),
                                 ),
                               ),
                             ),
@@ -204,46 +190,39 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFF6200), // Orange background color
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20), // Padding for button size
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30), side: const BorderSide(color: Colors.white , width: 5), // Rounded corners
-                          ),
-                        ),
-                        child: const Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Skip & Continue',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white, // White text
-                                fontWeight: FontWeight.bold, // Bold text
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Icon(
-                              Icons.arrow_forward_ios_rounded, // Arrow icon similar to the image
-                              color: Color(0xFF0066FF),
-                              size: 20,// Blue color for the arrow
-                            ), // Circular arrow icon
-                          ],
-                        ),
-                        onPressed:  () {
-                          // Restart the quiz with a random question from index 0 to 6
-                          int firstQuestionIndex = (DateTime.now().millisecond % 7); // Random question from index 0-6
+                      GestureDetector(
+                        onTap: () {
+                          int firstQuestionIndex = (DateTime.now().millisecond % 7);
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                               builder: (context) => HomeScreen(currentQuestionIndex: firstQuestionIndex),
                             ),
-                                (route) => false, // Removes all previous routes
+                                (route) => false,
                           );
                         },
+                        child: const Text("Skip", style: TextStyle(fontSize: 20, color: Color(0xff4a1518), fontWeight: FontWeight.w700)),
                       ),
+                      const SizedBox(width: 50),
+                      GestureDetector(
+                        onTap: () {
+                          _submitPhoneNumber();
+                          int firstQuestionIndex = (DateTime.now().millisecond % 7);
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(currentQuestionIndex: firstQuestionIndex),
+                            ),
+                                (route) => false,
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/img/continue_button.png',
+                          fit: BoxFit.contain,
+                          width: 260,
+                          height: 50,
+                        ),
+                      )
                     ],
                   ),
                 ],

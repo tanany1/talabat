@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
 import '../home_screen/home.dart';
 
 class CorrectFirstAnswerScreen extends StatelessWidget {
@@ -6,61 +7,64 @@ class CorrectFirstAnswerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final confettiController = ConfettiController(duration: const Duration(seconds: 5));
+
+    // Start confetti animation when the screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      confettiController.play();
+    });
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/img/Winner-screen.jpg'), // Background for correct answer screen
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to a random question from index 7 or 8
-                  int nextQuestionIndex = 7 + (DateTime.now().millisecond % 2);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(currentQuestionIndex: nextQuestionIndex),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF6200), // Orange background color
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20), // Padding for button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), side: const BorderSide(color: Colors.white , width: 5), // Rounded corners (similar to the image)
-                  ),
-                ),
-                child: const Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Next Question',
-                        style: TextStyle(
-                          fontSize: 60,
-                          color: Colors.white, // White text
-                          fontWeight: FontWeight.bold, // Bold text
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded, // Arrow icon similar to the image
-                        color: Color(0xFF0066FF),
-                        size: 50,// Blue color for the arrow
-                      ),
-                    ]
-                ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/img/win.jpg'), // Background for correct answer screen
+                fit: BoxFit.cover,
               ),
-            ],
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/img/correct.png', fit: BoxFit.contain,width: 250,height: 250,),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      int nextQuestionIndex = 7 + (DateTime.now().millisecond % 2);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(currentQuestionIndex: nextQuestionIndex),
+                        ),
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/img/next.png', // Replace with your image path
+                      fit: BoxFit.contain, // Adjust how the image fits in the container
+                      width: 900, // Adjust based on your design
+                      height: 150, // Adjust based on your design
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: confettiController,
+              maxBlastForce: 60,
+              numberOfParticles: 300,
+              blastDirectionality: BlastDirectionality.explosive,
+              shouldLoop: true,
+              colors: const [
+                Colors.orange
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
