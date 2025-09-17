@@ -19,8 +19,13 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/img/Talabat-Logo.png', fit: BoxFit.contain, height: 200,width: MediaQuery.of(context).size.width*0.75,), //talabat logo
-              const SizedBox(height: 50),
+              Image.asset(
+                'assets/img/Talabat-Logo.png',
+                fit: BoxFit.contain,
+                height: MediaQuery.of(context).size.height * 0.22,
+                width: MediaQuery.of(context).size.width * 0.75,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.06),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -31,11 +36,10 @@ class WelcomeScreen extends StatelessWidget {
                   );
                 },
                 child: Image.asset(
-                  'assets/img/start.png', // Replace with your image path
-                  fit: BoxFit.contain, // Adjust how the image fits in the container
-                  // Optionally, set width and height if needed
-                  width: 900, // Adjust based on your design
-                  height: 150, // Adjust based on your design
+                  'assets/img/start.png',
+                  fit: BoxFit.contain,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.12,
                 ),
               )
             ],

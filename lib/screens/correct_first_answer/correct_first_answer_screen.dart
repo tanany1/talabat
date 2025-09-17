@@ -28,8 +28,13 @@ class CorrectFirstAnswerScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/img/correct.png', fit: BoxFit.contain,width: 250,height: 250,),
-                  const SizedBox(height: 20),
+                  Image.asset(
+                    'assets/img/correct.png',
+                    fit: BoxFit.contain,
+                    width: MediaQuery.of(context).size.width * 0.18,
+                    height: MediaQuery.of(context).size.height * 0.22,
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   GestureDetector(
                     onTap: () {
                       int nextQuestionIndex = 7 + (DateTime.now().millisecond % 2);
@@ -41,10 +46,10 @@ class CorrectFirstAnswerScreen extends StatelessWidget {
                       );
                     },
                     child: Image.asset(
-                      'assets/img/next.png', // Replace with your image path
-                      fit: BoxFit.contain, // Adjust how the image fits in the container
-                      width: 900, // Adjust based on your design
-                      height: 150, // Adjust based on your design
+                      'assets/img/next.png',
+                      fit: BoxFit.contain,
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.12,
                     ),
                   )
                 ],

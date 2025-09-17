@@ -19,9 +19,13 @@ class IncorrectAnswerScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/img/wrong.png', fit: BoxFit.contain,width: 250,height: 250,),
-              // Add an image for incorrect answer
-              const SizedBox(height: 20),
+              Image.asset(
+                'assets/img/wrong.png',
+                fit: BoxFit.contain,
+                width: MediaQuery.of(context).size.width * 0.18,
+                height: MediaQuery.of(context).size.height * 0.22,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               const Text(
                 'Wrong Answer! Try Again',
                 style: TextStyle(
@@ -30,7 +34,7 @@ class IncorrectAnswerScreen extends StatelessWidget {
                   color: Color(0xff4a1518),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               GestureDetector(
                 onTap: () {
                   // Restart the quiz with a random question from index 0 to 6
@@ -49,9 +53,9 @@ class IncorrectAnswerScreen extends StatelessWidget {
                   'assets/img/try_again.png', // Replace with your image path
                   fit: BoxFit.contain,
                   // Adjust how the image fits in the container
-                  width: 900,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   // Adjust based on your design
-                  height: 150, // Adjust based on your design
+                  height: MediaQuery.of(context).size.height * 0.12,
                 ),
               )
             ],

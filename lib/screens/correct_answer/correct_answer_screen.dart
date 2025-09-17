@@ -28,7 +28,7 @@ class CorrectAnswerScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 250),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.25),
                   GestureDetector(
                     onTap: () {
                       int firstQuestionIndex = (DateTime.now().millisecond % 7); // Random question from index 0-6
@@ -43,8 +43,8 @@ class CorrectAnswerScreen extends StatelessWidget {
                     child: Image.asset(
                       'assets/img/start_over.png', // Replace with your image path
                       fit: BoxFit.contain, // Adjust how the image fits in the container
-                      width: 900, // Adjust based on your design
-                      height: 150, // Adjust based on your design
+                      width: MediaQuery.of(context).size.width * 0.5, // Adjust based on your design
+                      height: MediaQuery.of(context).size.height * 0.12, // Adjust based on your design
                     ),
                   ),
                 ],

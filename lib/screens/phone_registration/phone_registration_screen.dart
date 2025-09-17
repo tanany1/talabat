@@ -57,6 +57,9 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -72,12 +75,12 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
           // Centered container
           Center(
             child: Container(
-              padding: const EdgeInsets.all(20),
-              width: 450,
-              height: 550,
+              padding: EdgeInsets.all(screenWidth * 0.02),
+              width: screenWidth * 0.35,
+              height: screenHeight * 0.65,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(screenWidth * 0.01),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
@@ -106,20 +109,20 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.012,
                             color: Colors.black,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 20,),
+                      SizedBox(width: screenWidth * 0.015),
                       SizedBox(
-                        width: 60,
-                        height: 60,
+                        width: screenWidth * 0.045,
+                        height: screenWidth * 0.045,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(screenWidth * 0.01),
                             ),
                             padding: EdgeInsets.zero,
                             backgroundColor: const Color(0xffff5900),
@@ -130,46 +133,46 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: screenHeight * 0.01),
                   // Keypad for digits
                   Expanded(
                     child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
+                        mainAxisSpacing: screenHeight * 0.01,
+                        crossAxisSpacing: screenWidth * 0.01,
                         childAspectRatio: 1.0,
-                        mainAxisExtent: 80,
+                        mainAxisExtent: screenHeight * 0.08,
                       ),
                       itemCount: 10,
                       itemBuilder: (context, index) {
                         if (index == 9) {
                           return Center(
                             child: SizedBox(
-                              width: 450, // Span the width of 3 buttons
-                              height: 80,
+                              width: screenWidth * 0.33,
+                              height: screenHeight * 0.08,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(screenWidth * 0.01),
                                   ),
                                   padding: EdgeInsets.zero,
                                   backgroundColor: Colors.grey[100],
                                 ),
                                 onPressed: () => _addDigit('0'),
-                                child: const Text('0', style: TextStyle(fontSize: 40)),
+                                child: Text('0', style: TextStyle(fontSize: screenWidth * 0.03)),
                               ),
                             ),
                           );
                         } else {
                           return Center(
                             child: SizedBox(
-                              width: 150,
-                              height: 80,
+                              width: screenWidth * 0.11,
+                              height: screenHeight * 0.08,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(screenWidth * 0.01),
                                   ),
                                   padding: EdgeInsets.zero,
                                   backgroundColor: Colors.grey[100],
@@ -177,7 +180,7 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                                 onPressed: () => _addDigit((index + 1).toString()),
                                 child: Text(
                                   (index + 1).toString(),
-                                  style: const TextStyle(fontSize: 40),
+                                  style: TextStyle(fontSize: screenWidth * 0.03),
                                 ),
                               ),
                             ),
@@ -186,7 +189,7 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: screenHeight * 0.01),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -198,12 +201,12 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                             MaterialPageRoute(
                               builder: (context) => HomeScreen(currentQuestionIndex: firstQuestionIndex),
                             ),
-                                (route) => false,
+                            (route) => false,
                           );
                         },
-                        child: const Text("Skip", style: TextStyle(fontSize: 20, color: Color(0xff4a1518), fontWeight: FontWeight.w700)),
+                        child: Text("Skip", style: TextStyle(fontSize: screenWidth * 0.018, color: Color(0xff4a1518), fontWeight: FontWeight.w700)),
                       ),
-                      const SizedBox(width: 50),
+                      SizedBox(width: screenWidth * 0.04),
                       GestureDetector(
                         onTap: () {
                           _submitPhoneNumber();
@@ -213,14 +216,14 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                             MaterialPageRoute(
                               builder: (context) => HomeScreen(currentQuestionIndex: firstQuestionIndex),
                             ),
-                                (route) => false,
+                            (route) => false,
                           );
                         },
                         child: Image.asset(
                           'assets/img/continue_button.png',
                           fit: BoxFit.contain,
-                          width: 260,
-                          height: 50,
+                          width: screenWidth * 0.18,
+                          height: screenHeight * 0.06,
                         ),
                       )
                     ],

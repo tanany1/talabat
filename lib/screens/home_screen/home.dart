@@ -231,45 +231,50 @@ class _HomeScreenState extends State<HomeScreen> {
         ? questions[widget.currentQuestionIndex]
         : questions[7 + (widget.currentQuestionIndex % 2)];
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/img/Background.jpg'), // Background image
+            image: AssetImage('assets/img/Background.jpg'),
             fit: BoxFit.cover,
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(60.0),
+          padding: EdgeInsets.all(screenWidth * 0.04),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: MediaQuery.sizeOf(context).height*0.25),
+              SizedBox(height: screenHeight * 0.18),
               Text(
                 question.text,
-                style: const TextStyle(
-                  fontSize: 60,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.04,
                   fontWeight: FontWeight.w900,
-                  color: Color(0xff4a1518),
+                  color: const Color(0xff4a1518),
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 100),
+              SizedBox(height: screenHeight * 0.06),
               Expanded(
                 child: GridView.builder(
                   itemCount: question.options.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 1.3,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: screenWidth > 1200 ? 4 : 2,
+                    mainAxisSpacing: screenWidth * 0.015,
+                    crossAxisSpacing: screenWidth * 0.015,
+                    childAspectRatio: screenWidth > 1200 ? 1.3 : 0.9,
                   ),
                   itemBuilder: (context, index) {
                     return _buildOptionCard(
                       index,
                       question.options[index].text,
                       question.options[index].imagePath,
+                      screenWidth,
+                      screenHeight,
                     );
                   },
                 ),
@@ -281,13 +286,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildOptionCard(int index, String text, String imagePath) {
+  Widget _buildOptionCard(int index, String text, String imagePath, double screenWidth, double screenHeight) {
     return GestureDetector(
       onTap: () => handleAnswer(index),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(screenWidth * 0.03),
           boxShadow: const [
             BoxShadow(
               color: Colors.black26,
@@ -301,17 +306,17 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Image.asset(
               imagePath,
-              height: 200,
-              width: 200,
+              height: screenHeight * 0.18,
+              width: screenWidth * 0.13,
               fit: BoxFit.contain,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.02),
             Text(
               text,
-              style: const TextStyle(
-                fontSize: 32,
+              style: TextStyle(
+                fontSize: screenWidth * 0.022,
                 fontWeight: FontWeight.bold,
-                color: Color(0xff4a1518),
+                color: const Color(0xff4a1518),
               ),
               textAlign: TextAlign.center,
             ),
